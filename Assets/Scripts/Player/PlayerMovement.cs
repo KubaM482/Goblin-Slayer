@@ -3,27 +3,25 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum PlayerState
-{
-    Idle,
-    Running,
-    Attacking
-}
 
 
 public class PlayerMovement : MonoBehaviour
-{    
-  
-     [SerializeField] private float speed;
-    [SerializeField] private float cooldownAttack;
-    private float lastTimeAttack = 0f;
+{
 
-    private Rigidbody2D rb;
-    private Animator anim;
-    Vector2 moveInput;
-    public static PlayerMovement Instance {get; private set; }
-    private PlayerState currentState = PlayerState.Idle;
-   
+    [SerializeField] private float speed;
+    [SerializeField] private float cooldownAttack;
+
+    private float lastTimeAttack = 0f;
+    public Rigidbody2D rb { get; private set; }
+    public Animator anim { get; private set; }
+    public Vector2 moveInput { get; private set; }
+    private IPlayerState currenState;
+    public static PlayerMovement Instance { get; private set; }
+
+    public bool canAttack => lastTimeAttack >= cooldownAttack;
+    public bool isAttackOnCooldown => lastTimeAttack < cooldownAttack;
+
+
 
 
 
@@ -38,20 +36,37 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
         Instance = this;
-        lastTimeAttack = 100f;
 
+
+
+    }
+
+    private void Start()
+    {
+        changeState(new IdleState());
+
+    }
+
+    void LateUpdate()
+    {
+        bool isMoving = rb.linearVelocity.magnitude > 0.05f;
+        anim.SetBool("IsRunning", isMoving);
+        Debug.Log($"[DEBUG] Velocity: {rb.linearVelocity}, IsRunning: {isMoving}");
     }
 
     void Update()
     {
+        lastTimeAttack += Time.deltaTime;
+        currenState.Update(this);
         HandleMovement();
-        HandleState();
-        AnimationUpdate();
+    }
 
-        if (lastTimeAttack < cooldownAttack)
-        {
-            lastTimeAttack += Time.deltaTime;    
-        }
+    public void changeState(IPlayerState newState)
+    {
+        currenState?.Exit(this);
+        currenState = newState;
+        currenState.Enter(this);
+
 
     }
 
@@ -62,30 +77,21 @@ public class PlayerMovement : MonoBehaviour
 
     void OnAttack(InputValue value)
     {
-        if (currentState != PlayerState.Attacking && lastTimeAttack >= cooldownAttack)
+
+        if (canAttack)
         {
-            currentState = PlayerState.Attacking;
-            anim.SetTrigger("Attacking");
-            lastTimeAttack = 0f;
+            if (currenState is IdleState)
+            {
+                changeState(new AttackingState());
+            }
+
         }
     }
 
 
-    void HandleState()
-    {
-       
 
-        if (moveInput == Vector2.zero)
-        {
-            currentState = PlayerState.Idle;
-        }
-        else
-        {
-            currentState = PlayerState.Running;
-        }
-    }
+    public void HandleMovement()
 
-    void HandleMovement()
     {
         bool playerHasHorizontalSpeed = math.abs(rb.linearVelocity.x) > Mathf.Epsilon;
         Vector2 movement = moveInput.normalized * speed;
@@ -103,9 +109,17 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    void AnimationUpdate()
+
+    public void OnAttackAnimationEnd()
     {
-        anim.SetBool("IsRunning", currentState == PlayerState.Running);
+
+        changeState(moveInput == Vector2.zero ? new IdleState() : new RunningState());
+    }
+
+    public void AttackResetCooldown()
+    {
+        lastTimeAttack = 0f;
     }
 
 }
+
