@@ -16,12 +16,18 @@ public class TorchEnemyAI : EnemyBase
     public EnemyState currentState;
     private float lastTimeEnemyAttack;
     private bool isAttacking;
+   
 
     protected override void Awake()
     {
-        base.Awake();
+        startingBaseEnemyHealth = 990;
         enemyDamage = 20;
         lastTimeEnemyAttack = 0f;
+
+        base.Awake();
+        
+
+        
     }
 
     private void Update()
@@ -67,9 +73,9 @@ public class TorchEnemyAI : EnemyBase
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
-
-
     }
+   
+   
     public void StopAttackOnFrame()
     {
         isAttacking = false;
@@ -83,9 +89,8 @@ public class TorchEnemyAI : EnemyBase
         if (lastTimeEnemyAttack >= cooldownAttack && !isAttacking)
         {
             lastTimeEnemyAttack = 0f;
-            Debug.Log("atakuje gracza");
             anim.SetTrigger("EnemyAttacking");
-           anim.SetBool("IsEnemyRunning", false);
+            anim.SetBool("IsEnemyRunning", false);
             isAttacking = true;
         }
 

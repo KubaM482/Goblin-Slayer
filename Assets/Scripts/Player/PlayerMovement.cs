@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastTimeAttack = 0f;
     public Rigidbody2D rb { get; private set; }
     public Animator anim { get; private set; }
+    private AttackHandler attackHandler;
     public Vector2 moveInput { get; private set; }
     private IPlayerState currenState;
     public static PlayerMovement Instance { get; private set; }
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        attackHandler = GetComponent<AttackHandler>();
 
         if (Instance != null && Instance != this)
         {
@@ -50,9 +52,10 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         bool isMoving = rb.linearVelocity.magnitude > 0.05f;
-        anim.SetBool("IsRunning", isMoving);
-        Debug.Log($"[DEBUG] Velocity: {rb.linearVelocity}, IsRunning: {isMoving}");
-    }
+         anim.SetBool("IsRunning", isMoving);
+       
+     }
+
 
     void Update()
     {
@@ -84,7 +87,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 changeState(new AttackingState());
             }
-
         }
     }
 
