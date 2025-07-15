@@ -5,7 +5,7 @@ public class EnemyBase : MonoBehaviour
 {
 
     [Header("Stats")]
-    [SerializeField] protected int startingHealth = 100;
+    [SerializeField] protected int startingBaseEnemyHealth = 100;
     [SerializeField] protected float movementSpeed = 4;
     [SerializeField] protected float attackRange = 1.5f;
     [SerializeField] protected int enemyDamage = 10;
@@ -20,7 +20,7 @@ public class EnemyBase : MonoBehaviour
     protected virtual void Awake()
     {
         healthSystem = GetComponent<HealthSystem>();
-        healthSystem.Init();
+        healthSystem.Init(startingBaseEnemyHealth);
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }

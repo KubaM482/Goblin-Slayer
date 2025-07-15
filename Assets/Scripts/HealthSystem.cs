@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class HealthSystem : MonoBehaviour
 {
-    [SerializeField] protected int MaxHealth = 100;
+    protected int MaxHealth;
     protected int currentHealth;
     
 
-    public void Init()
+    public void Init(int amount)
     {
-        
-        currentHealth = MaxHealth;
+        MaxHealth = amount;
+        currentHealth = amount;
     }
 
 

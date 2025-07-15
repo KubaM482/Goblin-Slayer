@@ -18,6 +18,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float cooldownAttack;
     private float lastTimeAttack = 0f;
 
+    public Rigidbody2D rb { get; private set; }
+    public Animator anim { get; private set; }
+    private AttackHandler attackHandler;
+    public Vector2 moveInput { get; private set; }
+    private IPlayerState currenState;
+    public static PlayerMovement Instance { get; private set; }
+
+    public bool canAttack => lastTimeAttack >= cooldownAttack;
+    public bool isAttackOnCooldown => lastTimeAttack < cooldownAttack;
+
+
     private Rigidbody2D rb;
     private Animator anim;
     Vector2 moveInput;
@@ -31,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        attackHandler = GetComponent<AttackHandler>();
 
         if (Instance != null && Instance != this)
         {
@@ -40,7 +52,23 @@ public class PlayerMovement : MonoBehaviour
         Instance = this;
         lastTimeAttack = 100f;
 
+
+
     }
+
+    private void Start()
+    {
+        changeState(new IdleState());
+
+    }
+
+    void LateUpdate()
+    {
+        bool isMoving = rb.linearVelocity.magnitude > 0.05f;
+         anim.SetBool("IsRunning", isMoving);
+       
+     }
+
 
     void Update()
     {
@@ -64,9 +92,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (currentState != PlayerState.Attacking && lastTimeAttack >= cooldownAttack)
         {
-            currentState = PlayerState.Attacking;
-            anim.SetTrigger("Attacking");
-            lastTimeAttack = 0f;
+
+            if (currenState is IdleState)
+            {
+                changeState(new AttackingState());
+            }
+
         }
     }
 

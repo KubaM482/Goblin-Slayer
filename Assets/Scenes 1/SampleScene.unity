@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 172166476}
   - component: {fileID: 172166475}
   - component: {fileID: 172166477}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TorchEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -198,7 +198,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!212 &172166472
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983342490f387b443bdfbab6897ec5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TorchEnemyAI
-  startingHealth: 100
+  startingBaseEnemyHealth: 100
   movementSpeed: 3
   attackRange: 1
   enemyDamage: 10
@@ -337,7 +337,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b9b1ea29bdc834ea9b282370e98081, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  MaxHealth: 100
 --- !u!95 &172166477
 Animator:
   serializedVersion: 7
@@ -6208,6 +6207,7 @@ GameObject:
   - component: {fileID: 692380738}
   - component: {fileID: 692380744}
   - component: {fileID: 692380742}
+  - component: {fileID: 692380745}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6416,6 +6416,24 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &692380745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 692380737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc3d3a10acb044643b234d95ff3b3907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackpoint: {fileID: 164822533}
+  attackRange: 0.1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  damage: 30
 --- !u!1 &813938040
 GameObject:
   m_ObjectHideFlags: 0
