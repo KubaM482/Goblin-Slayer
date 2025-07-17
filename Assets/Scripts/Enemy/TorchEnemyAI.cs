@@ -16,7 +16,7 @@ public class TorchEnemyAI : EnemyBase
     public EnemyState currentState;
     private float lastTimeEnemyAttack;
     private bool isAttacking;
-   
+    [SerializeField]private Transform attackpoint;
 
     protected override void Awake()
     {
@@ -25,9 +25,9 @@ public class TorchEnemyAI : EnemyBase
         lastTimeEnemyAttack = 0f;
 
         base.Awake();
-        
 
-        
+
+
     }
 
     private void Update()
@@ -69,13 +69,13 @@ public class TorchEnemyAI : EnemyBase
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
-        else if ( direction.x < 0)
+        else if (direction.x < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
         }
     }
-   
-   
+
+
     public void StopAttackOnFrame()
     {
         isAttacking = false;
@@ -112,14 +112,24 @@ public class TorchEnemyAI : EnemyBase
         }
         else
         {
-            currentState = EnemyState.Chasing;    
+            currentState = EnemyState.Chasing;
         }
 
     }
 
     private void Die()
     {
-        base.EnemyDie();    
+        base.EnemyDie();
     }
+
+    public void CheckCollidersOfPlayer()
+    {
+        Collider2D[] playerCollider = Physics2D.OverlapCircleAll(attackpoint.position, attackRange, playerLayer);
+        if (playerCollider.Length > 0)
+        {
+            playerCollider[0].GetComponent<HealthSystem>().ChangeHealth(-enemyDamage);
+        }
+
+     }
 
 }
