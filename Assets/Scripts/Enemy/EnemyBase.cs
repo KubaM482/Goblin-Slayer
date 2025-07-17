@@ -10,6 +10,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected float attackRange = 1.5f;
     [SerializeField] protected int enemyDamage = 10;
     [SerializeField] protected float cooldownAttack = 2f;
+    [SerializeField] protected LayerMask playerLayer;
 
     [Header("Inspector Attributes")]
     [SerializeField]protected Transform player;
@@ -35,13 +36,5 @@ public class EnemyBase : MonoBehaviour
         Debug.Log("Enemy Died");
     }
 
-    protected virtual void TakeDamage(int amount)
-    {
-        healthSystem.ChangeHealth(-enemyDamage);
-        if (healthSystem.isDead())
-        {
-            EnemyDie();
-        }
-    }
-
+ 
 }
