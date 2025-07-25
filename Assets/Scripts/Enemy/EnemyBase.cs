@@ -13,7 +13,7 @@ public class EnemyBase : MonoBehaviour
     [SerializeField] protected LayerMask playerLayer;
 
     [Header("Inspector Attributes")]
-    [SerializeField]protected Transform player;
+    protected Transform player;
     protected HealthSystem healthSystem;
     protected Animator anim;
     protected Rigidbody2D rb;
@@ -24,12 +24,23 @@ public class EnemyBase : MonoBehaviour
         healthSystem.Init(startingBaseEnemyHealth);
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            player = playerObj.transform;
+        }
+        else
+        {
+            Debug.Log("Player not found");
+         }
+
     }
 
-    protected virtual void Start()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-    }
+    // protected virtual void Start()
+    // {
+    //     player = GameObject.FindGameObjectWithTag("Player").transform;
+    // }
 
     protected virtual void EnemyDie()
     {
