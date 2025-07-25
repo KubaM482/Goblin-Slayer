@@ -118,11 +118,15 @@ public class PlayerMovement : MonoBehaviour
     {
 
         changeState(moveInput == Vector2.zero ? new IdleState() : new RunningState());
+
     }
 
     public void AttackResetCooldown()
     {
         lastTimeAttack = 0f;
+
     }
 
+
 }
+
