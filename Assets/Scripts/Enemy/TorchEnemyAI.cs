@@ -16,21 +16,19 @@ public class TorchEnemyAI : EnemyBase
     public EnemyState currentState;
     private float lastTimeEnemyAttack;
     private bool isAttacking;
-    [SerializeField]private Transform attackpoint;
-
+    [SerializeField] private Transform attackpoint;
     protected override void Awake()
     {
         startingBaseEnemyHealth = 990;
         enemyDamage = 20;
         lastTimeEnemyAttack = 0f;
-
         base.Awake();
 
 
 
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         switch (currentState)
         {
@@ -61,8 +59,10 @@ public class TorchEnemyAI : EnemyBase
     private void ChasePlayer()
     {
         if (player == null || isAttacking) return;
-        Vector3 direction = (player.position - transform.position).normalized;
-        transform.position += direction * movementSpeed * Time.deltaTime;
+        Vector2 direction = (player.position - transform.position).normalized;
+        Vector2 newPosition = rb.position + direction * movementSpeed * Time.fixedDeltaTime;
+        rb.MovePosition(newPosition);
+
         anim.SetBool("IsEnemyRunning", true);
 
         if (direction.x > 0)
@@ -129,7 +129,5 @@ public class TorchEnemyAI : EnemyBase
         {
             playerCollider[0].GetComponent<HealthSystem>().ChangeHealth(-enemyDamage);
         }
-
-     }
-
+    }
 }

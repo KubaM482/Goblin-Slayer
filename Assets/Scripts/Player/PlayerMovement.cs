@@ -56,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+
+
     private void Start()
     {
         changeState(new IdleState());
@@ -65,9 +67,9 @@ public class PlayerMovement : MonoBehaviour
     void LateUpdate()
     {
         bool isMoving = rb.linearVelocity.magnitude > 0.05f;
-         anim.SetBool("IsRunning", isMoving);
-       
-     }
+        anim.SetBool("IsRunning", isMoving);
+
+    }
 
 
     void Update()
